@@ -5,8 +5,9 @@ def read_input(filename):
     eqs = []
     with open(filename) as f:
         for line in f:
-            answer = line.strip().split(': ')[0]
-            operands = line.strip().split(': ')[1].split(' ')
+            l = line.strip().split(': ')
+            answer = l[0]
+            operands = l[1].split(' ')
             eqs.append((int(answer), tuple(int(i) for i in operands)))
     return eqs
 
