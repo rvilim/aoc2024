@@ -61,10 +61,10 @@ def main(profile):
         profiler = cProfile.Profile()
         profiler.enable()
     
-    # test_eqs = read_input('test.txt')
-    # test_one_answer, test_one_invalid_eqs = one(test_eqs)
+    test_eqs = read_input('test.txt')
+    test_one_answer, test_one_invalid_eqs = one(test_eqs)
 
-    # assert 3749 == test_one_answer
+    assert 3749 == test_one_answer
 
     input = read_input('input.txt')
 
@@ -76,7 +76,7 @@ def main(profile):
     one_answer, one_invalid_eqs = one(input)
     print(one_answer)
 
-    # assert 11387 == two(test_eqs, test_one_answer, test_one_invalid_eqs)
+    assert 11387 == two(test_eqs, test_one_answer, test_one_invalid_eqs)
     print(two(input, one_answer, one_invalid_eqs))
 
     if profile:
