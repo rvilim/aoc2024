@@ -90,7 +90,6 @@ def main():
     input_garden = read_input('input.txt')
     print(one(input_garden))
 
-
     assert 80 == two(test_garden_1)
     assert 436 == two(test_garden_2)
     assert 1206 == two(test_garden_3)
