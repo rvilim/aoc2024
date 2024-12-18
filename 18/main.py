@@ -1,15 +1,17 @@
 from collections import defaultdict
 from heapq import heappop, heappush
-from functools  import cache
+from functools import cache
 from copy import deepcopy
 
+
 def read_input(filename):
-    corrupted=[]
+    corrupted = []
     with open(filename) as f:
-        for line in f:  
-            corrupted.append(C(*map(int, line.strip().split(','))))
+        for line in f:
+            corrupted.append(C(*map(int, line.strip().split(","))))
 
     return corrupted
+
 
 class C:
     def __init__(self, x, y):
@@ -20,7 +22,8 @@ class C:
         return C(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other):
-        return C(self.x - other.x, self.y - other.y)    
+        return C(self.x - other.x, self.y - other.y)
+
     def __repr__(self):
         return f"({self.x},{self.y})"
 
@@ -36,31 +39,39 @@ class C:
     def __gt__(self, other):
         return (self.x, self.y) > (other.x, other.y)
 
+
 @cache
 def get_all_neighbours(max_x, max_y):
     deltas = (C(0, 1), C(1, 0), C(0, -1), C(-1, 0))
     neighbours = defaultdict(dict)
-    
+
     for x in range(max_x):
         for y in range(max_y):
             cur = C(x, y)
             for delta in deltas:
                 new_pos = cur + delta
-                if new_pos.x >= 0 and new_pos.x < max_x and new_pos.y >= 0 and new_pos.y < max_y:
+                if (
+                    new_pos.x >= 0
+                    and new_pos.x < max_x
+                    and new_pos.y >= 0
+                    and new_pos.y < max_y
+                ):
                     neighbours[cur][new_pos] = 1
     return neighbours
+
 
 def get_neighbours(max_x, max_y, corrupted):
     neighbours = deepcopy(get_all_neighbours(max_x, max_y))
 
     corrupted_set = set(corrupted)
-    
+
     for node in neighbours:
         for neighbour in neighbours[node].keys():
             if neighbour in corrupted_set:
-                neighbours[node][neighbour]=float("inf")
+                neighbours[node][neighbour] = float("inf")
 
     return neighbours
+
 
 def dijkstra_heap(neighbours, start, end):
     dist = {point: float("inf") for point in neighbours}
@@ -86,7 +97,7 @@ def dijkstra_heap(neighbours, start, end):
                 alt = d + weight
                 if alt < dist[v]:
                     dist[v] = alt
-                    prev[v]=u  # Add the new optimal path
+                    prev[v] = u  # Add the new optimal path
                     heappush(Q, (alt, v))
 
     return dist, prev
@@ -99,6 +110,7 @@ def get_path(end, prev):
         end = prev[end]
     return path
 
+
 def print_grid(max_x, max_y, corrupted, paths):
     for y in range(max_y):
         for x in range(max_x):
@@ -110,20 +122,22 @@ def print_grid(max_x, max_y, corrupted, paths):
                 print(".", end="")
         print()
 
+
 def one(corrupted, size_x, size_y, n_bytes):
     neighbours = get_neighbours(size_x, size_y, corrupted[:n_bytes])
     start = C(0, 0)
-    end = C(size_x-1, size_y-1)
+    end = C(size_x - 1, size_y - 1)
     cost, _ = dijkstra_heap(neighbours, start, end)
-    
+
     return cost[end]
+
 
 def two(corrupted, size_x, size_y):
     min_bytes = 0
     max_bytes = len(corrupted)
 
     start = C(0, 0)
-    end = C(size_x-1, size_y-1)
+    end = C(size_x - 1, size_y - 1)
 
     while min_bytes < max_bytes:
         mid = (min_bytes + max_bytes) // 2
@@ -135,21 +149,24 @@ def two(corrupted, size_x, size_y):
             max_bytes = mid
         else:
             min_bytes = mid + 1
-    
+
     neighbours = get_neighbours(size_x, size_y, corrupted)
     cost, _ = dijkstra_heap(neighbours, start, end)
-    
-    return f'{corrupted[mid].x},{corrupted[mid].y}'
+
+    return f"{corrupted[mid].x},{corrupted[mid].y}"
+
 
 def main():
     test_corrupted = read_input("test.txt")
-    assert 22==one(test_corrupted, 7, 7, 12)
-    
+    assert 22 == one(test_corrupted, 7, 7, 12)
+
     corrupted = read_input("input.txt")
     print(one(corrupted, 71, 71, 1024))
 
-    assert two(test_corrupted, 7, 7)=='6,1'
+    assert two(test_corrupted, 7, 7) == "6,1"
 
     print(two(corrupted, 71, 71))
+
+
 if __name__ == "__main__":
     main()
