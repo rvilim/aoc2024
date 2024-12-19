@@ -106,30 +106,20 @@ def run(program, registers):
     inst = 0
     output = []
     while inst < len(program):
-        # print([registers.A, registers.B, registers.C])
-        # print(inst, bin(registers.A))
         h = hash((inst, registers.A, registers.B, registers.C))
         if h in states:
             raise ValueError("Infinite loop detected")
         states.add(h)
-        # print(bin(registers.A), output)
-        # print(str(opcodes[program[inst].opcode]).split(' ')[1], [registers.A, registers.B, registers.C])
+
         inst = opcodes[program[inst].opcode](
             program[inst].operand, registers, inst, output
         )
-        # print(output)
-
-    # return ",".join(map(str, output))
     return output
 
 
 def one(program, registes):
     output = run(program, registes)
     return ",".join(map(str, output))
-
-
-def copy_registers(registers):
-    return Register(registers.A, registers.B, registers.C)
 
 
 def solve(program, num, depth):
