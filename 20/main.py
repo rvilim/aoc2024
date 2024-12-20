@@ -190,9 +190,6 @@ def solve(start, end, maze, cheat_length):
     dist, prev = dijkstra_heap(neighbours, start, end)
     path = get_path(end, prev)
 
-    # profiler = cProfile.Profile()
-    # profiler.enable()
-
     for pt1, pt2 in combinations(path, 2):
         # This is just an inlined and sped up manhattan distance. the weird abs_dx calculation is faster than abs()
         # We also just check the x coord before calculating the y coord
@@ -209,12 +206,6 @@ def solve(start, end, maze, cheat_length):
     result = sum(
         cheats[key] for key in cheats.keys() if key >= 100 and cheats[key] != 0
     )
-
-    # profiler.disable()
-    # stats = pstats.Stats(profiler)
-    # stats.sort_stats('cumulative')
-    # stats.print_stats()
-
     return result
 
 
