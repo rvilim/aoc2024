@@ -2,6 +2,7 @@ from heapq import heappop, heappush
 from collections import defaultdict
 import copy
 from itertools import combinations
+from functools import cache
 
 
 class C:
@@ -175,7 +176,9 @@ def get_mazes(base_neighbours):
 
 
 def manhattan(pt1, pt2):
-    return abs(pt2.x - pt1.x) + abs(pt2.y - pt1.y)
+    dx = pt2.x - pt1.x
+    dy = pt2.y - pt1.y
+    return (dx if dx > 0 else -dx) + (dy if dy > 0 else -dy)
 
 
 def solve(start, end, maze, cheat_length):
@@ -185,11 +188,19 @@ def solve(start, end, maze, cheat_length):
     path = get_path(end, prev)
 
     for pt1, pt2 in combinations(path, 2):
-        if manhattan(pt1, pt2) > cheat_length:
-            continue
-        cheats[int((dist[pt2] - dist[pt1]) - manhattan(pt1, pt2))] += 1
+        dx = pt2.x - pt1.x
+        dy = pt2.y - pt1.y
+        cheat_dist = (dx if dx > 0 else -dx) + (dy if dy > 0 else -dy)
 
-    return sum(cheats[key] for key in cheats.keys() if key >= 100 and cheats[key] != 0)
+        if cheat_dist > cheat_length:
+            continue
+        cheats[int((dist[pt2] - dist[pt1]) - cheat_dist)] += 1
+
+    result = sum(
+        cheats[key] for key in cheats.keys() if key >= 100 and cheats[key] != 0
+    )
+
+    return result
 
 
 def one(start, end, maze):
