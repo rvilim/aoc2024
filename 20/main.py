@@ -206,6 +206,7 @@ def solve(start, end, maze, cheat_length):
     result = sum(
         cheats[key] for key in cheats.keys() if key >= 100 and cheats[key] != 0
     )
+
     return result
 
 
