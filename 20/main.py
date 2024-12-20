@@ -188,6 +188,7 @@ def solve(start, end, maze, cheat_length):
     path = get_path(end, prev)
 
     for pt1, pt2 in combinations(path, 2):
+        # This is just an inlined and sped up manhattan
         dx = pt2.x - pt1.x
         dy = pt2.y - pt1.y
         cheat_dist = (dx if dx > 0 else -dx) + (dy if dy > 0 else -dy)
