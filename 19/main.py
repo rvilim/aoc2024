@@ -30,8 +30,8 @@ def solve_two(towels, pattern):
         return 1
 
     for towel in towels:
-        if len(pattern) >= len(towel) and all(p == t for p, t in zip(pattern, towel)):
-            n_combos += solve_two(towels, tuple(pattern[len(towel) :]))
+        if len(pattern) >= len(towel) and pattern.startswith(towel):
+            n_combos += solve_two(towels, pattern[len(towel) :])
     return n_combos
 
 
