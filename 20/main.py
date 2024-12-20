@@ -182,10 +182,16 @@ def manhattan(pt1, pt2):
 
 
 def solve(start, end, maze, cheat_length):
+    import cProfile
+    import pstats
+
     cheats = defaultdict(int)
     neighbours = parse_neighbors(maze)
     dist, prev = dijkstra_heap(neighbours, start, end)
     path = get_path(end, prev)
+
+    # profiler = cProfile.Profile()
+    # profiler.enable()
 
     for pt1, pt2 in combinations(path, 2):
         # This is just an inlined and sped up manhattan distance. the weird abs_dx calculation is faster than abs()
@@ -197,13 +203,17 @@ def solve(start, end, maze, cheat_length):
 
         cheat_dist += abs(pt2.y - pt1.y)
 
-        if cheat_dist > cheat_length:
-            continue
-        cheats[int((dist[pt2] - dist[pt1]) - cheat_dist)] += 1
+        if cheat_dist <= cheat_length:
+            cheats[int((dist[pt2] - dist[pt1]) - cheat_dist)] += 1
 
     result = sum(
         cheats[key] for key in cheats.keys() if key >= 100 and cheats[key] != 0
     )
+
+    # profiler.disable()
+    # stats = pstats.Stats(profiler)
+    # stats.sort_stats('cumulative')
+    # stats.print_stats()
 
     return result
 
