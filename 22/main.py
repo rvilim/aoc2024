@@ -11,7 +11,6 @@ def step(secret):
     secret = ((secret * 64) ^ secret) % 16777216
     secret = ((secret // 32) ^ secret) % 16777216
     secret = ((secret * 2048) ^ secret) % 16777216
-
     return secret
 
 
@@ -43,8 +42,8 @@ def two(secrets):
                 seen_patterns.add(pattern)
             prev_price = price
 
-    max_profit = max(profits.values())
-
+    # max_profit = max(profits.values())
+    max_profit = max(v for k, v in profits.items() if None not in k)
     return max_profit
 
 
