@@ -39,13 +39,13 @@ def find_clique(connections, seed_node):
     while todo:
         cur = todo.pop()
 
-        # if all the members of the ruunning clique are connected to the current node
+        # if all the members of the running clique are connected to the current node
         if all(cur in connections[confirmed] for confirmed in clique):
             # then this node should be a member of the clique too
             clique.add(cur)
 
             # then we add all the connections of the current node to our todo pile
-            # (we are removing the ones that we've laready looked at, e.g. "- seen")
+            # (we are removing the ones that we've already looked at, e.g. "- seen")
             todo |= connections[cur] - seen
 
             # then add all the connections we just looked at to seen
