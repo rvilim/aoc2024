@@ -72,6 +72,8 @@ def main():
 
     real_input = read_input("input.txt")
 
+    print(one(real_input))
+
     assert two(test_input) == "co,de,ka,ta"
 
     print(two(real_input))
