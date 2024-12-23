@@ -41,7 +41,7 @@ def find_clique(connections, seed_node):
 
         # if all the members of the running clique are connected to the current node, e.g. if the clique is a subset
         # of the connections of the current node
-        if clique.issubset(connections[cur]):
+        if all(cur in connections[confirmed] for confirmed in clique):
             # then this node should be a member of the clique too
             clique.add(cur)
 
